@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tabla de datos con JavaScript y DOM</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid black;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Tabla de datos</h1>
+    <div>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre">
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad">
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad">
+        <button id="agregar">Agregar</button>
+    </div>
+    <div id="tabla-container"></div>
+
+    <script>
+        // datos de ejemplo
+        var datos = [
+            { nombre: "Juan", edad: 30, ciudad: "Madrid" },
+            { nombre: "María", edad: 25, ciudad: "Barcelona" },
+            { nombre: "Pedro", edad: 40, ciudad: "Valencia" },
+            { nombre: "Ana", edad: 35, ciudad: "Sevilla" }
+        ];
+
+        // crear la tabla
+        function crearTabla() {
+            var tabla = document.createElement("table");
+            var cabecera = tabla.createTHead();
+            var filaCabecera = cabecera.insertRow();
+            var thNombre = document.createElement("th");
+            thNombre.textContent = "Nombre";
+            var thEdad = document.createElement("th");
+            thEdad.textContent = "Edad";
+            var thCiudad = document.createElement("th");
+            thCiudad.textContent = "Ciudad";
+            var thEliminar = document.createElement("th");
+            thEliminar.textContent = "Eliminar";
+            filaCabecera.appendChild(thNombre);
+            filaCabecera.appendChild(thEdad);
+            filaCabecera.appendChild(thCiudad);
+            filaCabecera.appendChild(thEliminar);
+
+            var cuerpo = tabla.createTBody();
+            for (var i = 0; i < datos.length; i++) {
+                var fila = cuerpo.insertRow();
+                var celdaNombre = fila.insertCell();
+                celdaNombre.textContent = datos[i].nombre;
+                var celdaEdad = fila.insertCell();
+                celdaEdad.textContent = datos[i].edad;
+                var celdaCiudad = fila.insertCell();
+                celdaCiudad.textContent = datos[i].ciudad;
+                var celdaEliminar = fila.insertCell();
+                var botonEliminar = document.createElement("button");
+                botonEliminar.textContent = "Eliminar";
+                botonEliminar.addEventListener("click", function () {
+                    var fila = this.parentNode.parentNode;
+                    var index = fila.rowIndex - 1;
+                    datos.splice(index, 1);
+                    fila.parentNode.removeChild(fila);
+                });
+                celdaEliminar.appendChild(botonEliminar);
+            }
+
+            // añadir la tabla al contenedor
+            var contenedor = document.getElementById("tabla-container");
+            contenedor.innerHTML = "";
+            contenedor.appendChild(tabla);
+        }
+
+        // función para agregar un nuevo usuario a los datos y actualizar la tabla
+        function agregarUsuario() {
+            var nombre = document.getElementById("nombre").value;
+            var edad = document.getElementById("edad").value;
+            var ciudad = document.getElementById("ciudad").value;
+            if (nombre && edad && ciudad) {
+                var nuevoUsuario = { nombre: nombre, edad: edad, ciudad: ciudad };
+                datos.push(nuevoUsuario);
+                crearTabla();
+                document.getElementById("nombre").value = "";
+                document.getElementById("edad").value = "";
+                document.getElementById("ciudad").value = "";
+            }
+        }
+
+        // añadir el evento al botón "Agregar"
+        var botonAgregar = document.getElementById("agregar");
+        botonAgregar.addEventListener("click", agregarUsuario);
+
+        // crear la tabla al cargar la página
+        crearTabla();
+
+
+
+
+    </script>
