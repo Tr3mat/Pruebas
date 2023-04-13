@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table id="tabla">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Agregar al carrito</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Camisa</td>
+            <td>$20</td>
+            <td><input type="number" value="1"></td>
+            <td><button class="agregar-carrito">Agregar</button></td>
+          </tr>
+          <tr>
+            <td>Pantalón</td>
+            <td>$30</td>
+            <td><input type="number" value="1"></td>
+            <td><button class="agregar-carrito">Agregar</button></td>
+          </tr>
+          <tr>
+            <td>Zapatos</td>
+            <td>$50</td>
+            <td><input type="number" value="1"></td>
+            <td><button class="agregar-carrito">Agregar</button></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div id="carrito">
+        <h2>Carrito</h2>
+        <ul id="lista-carrito">
+        </ul>
+        <p>Total: $<span id="total"></span></p>
+      </div>
+      
+
+
+
+
+    <script>
+        // Obtenemos la tabla y los botones de agregar al carrito
+        const tabla = document.getElementById('tabla');
+        const botonesAgregar = tabla.getElementsByClassName('agregar-carrito');
+
+        // Obtenemos el carrito y la lista de productos del carrito
+        const carrito = document.getElementById('carrito');
+        const listaCarrito = document.getElementById('lista-carrito');
+
+        // Variable para almacenar el total del carrito
+        let total = 0;
+
+        // Recorremos los botones de agregar al carrito y les añadimos un listener
+        for (const boton of botonesAgregar) {
+            boton.addEventListener('click', () => {
+                // Obtenemos la fila actual de la tabla
+                const fila = boton.parentNode.parentNode;
+
+                // Obtenemos los datos del producto
+                const nombre = fila.getElementsByTagName('td')[0].innerText;
+                const precio = parseFloat(fila.getElementsByTagName('td')[1].innerText.slice(1));
+                const cantidad = parseInt(fila.getElementsByTagName('input')[0].value);
+
+                // Creamos un elemento para la lista de productos del carrito
+                const li = document.createElement('li');
+                li.innerHTML = `${nombre} - $${precio} - Cantidad: ${cantidad}`;
+
+                // Añadimos el elemento a la lista de productos del carrito
+                listaCarrito.appendChild(li);
+
+                // Actualizamos el total del carrito
+                total += precio * cantidad;
+                document.getElementById('total').innerText = total;
+            });
+        }
+    </script>
+</body>
+
+</html>
