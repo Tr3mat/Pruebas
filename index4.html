@@ -48,8 +48,12 @@
       </div>
       
 
-
-
+    <div id="carrito">
+        <h2>Carrito</h2>
+        <ul id="lista-carrito">
+        </ul>
+        <p>Total: $<span id="total"></span></p>
+    </div>
 
     <script>
         // Obtenemos la tabla y los botones de agregar al carrito
@@ -62,6 +66,23 @@
 
         // Variable para almacenar el total del carrito
         let total = 0;
+
+        // Función para eliminar un producto del carrito
+        function eliminarProducto(e) {
+            // Obtenemos el li correspondiente al botón de eliminar
+            const li = e.target.parentNode;
+
+            // Obtenemos el precio y la cantidad del producto eliminado
+            const precio = parseFloat(li.innerText.split(' - ')[1].slice(1));
+            const cantidad = parseInt(li.innerText.split(' - ')[2].split(': ')[1]);
+
+            // Actualizamos el total del carrito
+            total -= precio * cantidad;
+            document.getElementById('total').innerText = total;
+
+            // Eliminamos el li de la lista de productos del carrito
+            li.remove();
+        }
 
         // Recorremos los botones de agregar al carrito y les añadimos un listener
         for (const boton of botonesAgregar) {
@@ -76,9 +97,13 @@
 
                 // Creamos un elemento para la lista de productos del carrito
                 const li = document.createElement('li');
-                li.innerHTML = `${nombre} - $${precio} - Cantidad: ${cantidad}`;
+                li.innerHTML = `${nombre} - $${precio} - Cantidad: ${cantidad} <button class="eliminar-producto">Eliminar</button>`;
 
-                // Añadimos el elemento a la lista de productos del carrito
+                // Añadimos el listener al botón de eliminar
+                const botonEliminar = li.getElementsByClassName('eliminar-producto')[0];
+                botonEliminar.addEventListener('click', eliminarProducto);
+
+                // Añadimos el li a la lista de productos del carrito
                 listaCarrito.appendChild(li);
 
                 // Actualizamos el total del carrito
