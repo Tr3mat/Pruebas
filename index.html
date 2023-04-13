@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <form>
+        <label for="loanAmount">Monto del préstamo:</label>
+        <input type="number" id="loanAmount" name="loanAmount" required>
+        <br>
+
+        <label for="interestRate">Tasa de interés:</label>
+        <input type="number" id="interestRate" name="interestRate" required>
+        <br>
+
+        <label for="loanTerm">Plazo en meses:</label>
+        <input type="number" id="loanTerm" name="loanTerm" required>
+        <br>
+
+        <button type="submit">Calcular tabla de amortización</button>
+    </form>
+
+    <table id="amortizationTable"></table>
+    <script src="index.js"></script>
+</body>
+</html>
