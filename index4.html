@@ -9,56 +9,54 @@
 </head>
 
 <body>
+
+    <div>
+        <label for="producto">Producto:</label>
+        <input type="text" id="producto">
+    </div>
+    <div>
+        <label for="precio">Precio:</label>
+        <input type="text" id="precio">
+    </div>
+    <div>
+        <label for="cantidad">Cantidad:</label>
+        <input type="text" id="cantidad">
+    </div>
+    <button id="agregar">Agregar al carrito</button>
+
     <table id="tabla">
         <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Cantidad</th>
-            <th>Agregar al carrito</th>
-          </tr>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+            </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Camisa</td>
-            <td>$20</td>
-            <td><input type="number" value="1"></td>
-            <td><button class="agregar-carrito">Agregar</button></td>
-          </tr>
-          <tr>
-            <td>Pantalón</td>
-            <td>$30</td>
-            <td><input type="number" value="1"></td>
-            <td><button class="agregar-carrito">Agregar</button></td>
-          </tr>
-          <tr>
-            <td>Zapatos</td>
-            <td>$50</td>
-            <td><input type="number" value="1"></td>
-            <td><button class="agregar-carrito">Agregar</button></td>
-          </tr>
+        <tbody id="tbody">
         </tbody>
-      </table>
-      
-      <div id="carrito">
-        <h2>Carrito</h2>
-        <ul id="lista-carrito">
-        </ul>
-        <p>Total: $<span id="total"></span></p>
-      </div>
-      
+    </table>
 
     <div id="carrito">
-        <h2>Carrito</h2>
+        <h2>Carrito de compras</h2>
         <ul id="lista-carrito">
         </ul>
-        <p>Total: $<span id="total"></span></p>
+        <p>Total: $<span id="total">0</span></p>
     </div>
 
+
+
+
     <script>
+        // Obtenemos los campos de texto y el botón de agregar
+        const campoProducto = document.getElementById('producto');
+        const campoPrecio = document.getElementById('precio');
+        const campoCantidad = document.getElementById('cantidad');
+        const botonAgregar = document.getElementById('agregar');
+
         // Obtenemos la tabla y los botones de agregar al carrito
         const tabla = document.getElementById('tabla');
-        const botonesAgregar = tabla.getElementsByClassName('agregar-carrito');
+        const tbody = document.getElementById('tbody');
 
         // Obtenemos el carrito y la lista de productos del carrito
         const carrito = document.getElementById('carrito');
@@ -84,33 +82,53 @@
             li.remove();
         }
 
-        // Recorremos los botones de agregar al carrito y les añadimos un listener
-        for (const boton of botonesAgregar) {
-            boton.addEventListener('click', () => {
-                // Obtenemos la fila actual de la tabla
-                const fila = boton.parentNode.parentNode;
+        // Añadimos un listener al botón de agregar al carrito
+        botonAgregar.addEventListener('click', () => {
+            // Obtenemos los valores de los campos de texto
+            const nombre = campoProducto.value;
+            const precio = parseFloat(campoPrecio.value);
+            const cantidad = parseInt(campoCantidad.value);
 
-                // Obtenemos los datos del producto
-                const nombre = fila.getElementsByTagName('td')[0].innerText;
-                const precio = parseFloat(fila.getElementsByTagName('td')[1].innerText.slice(1));
-                const cantidad = parseInt(fila.getElementsByTagName('input')[0].value);
+            // Creamos una nueva fila en la tabla
+            const fila = tbody.insertRow();
 
-                // Creamos un elemento para la lista de productos del carrito
-                const li = document.createElement('li');
-                li.innerHTML = `${nombre} - $${precio} - Cantidad: ${cantidad} <button class="eliminar-producto">Eliminar</button>`;
+            // Creamos las celdas para los datos del producto
+            const celdaProducto = fila.insertCell();
+            const celdaPrecio = fila.insertCell();
+            const celdaCantidad = fila.insertCell();
+            const celdaAcciones = fila.insertCell();
 
-                // Añadimos el listener al botón de eliminar
-                const botonEliminar = li.getElementsByClassName('eliminar-producto')[0];
-                botonEliminar.addEventListener('click', eliminarProducto);
+            // Agregamos los datos del producto a las celdas correspondientes
+            celdaProducto.innerText = nombre;
+            celdaPrecio.innerText = `$${precio}`;
+            celdaCantidad.innerText = cantidad;
 
-                // Añadimos el li a la lista de productos del carrito
-                listaCarrito.appendChild(li);
+            // Creamos un botón de eliminar para la fila
+            const botonEliminar = document.createElement('button');
+            botonEliminar.innerText = 'Eliminar';
+            botonEliminar.addEventListener('click', eliminarProducto);
+            celdaAcciones.appendChild(botonEliminar);
 
-                // Actualizamos el total del carrito
-                total += precio * cantidad;
-                document.getElementById('total').innerText = total;
-            });
-        }
+            // Agregamos el precio del producto al total del carrito
+            total += precio * cantidad;
+            document.getElementById('total').innerText = total;
+
+            // Creamos un li con los datos del producto para agregar al carrito
+            const li = document.createElement('li');
+            li.innerText = `${nombre} - $${precio} - Cantidad: ${cantidad} - Total: $${precio * cantidad}`;
+
+            // Agregamos un botón de eliminar al li
+            const botonEliminarCarrito = document.createElement('button');
+            botonEliminarCarrito.innerText = 'X';
+            botonEliminarCarrito.addEventListener('click', eliminarProducto);
+            li.appendChild(botonEliminarCarrito);
+
+            // Agregamos el li a la lista de productos del carrito
+            listaCarrito.appendChild(li);
+
+            // Mostramos el carrito
+            carrito.style.display = 'block';
+        });
     </script>
 </body>
 
